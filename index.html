@@ -5,81 +5,128 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Renk Hesaplayıcı</title>
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; background: #f9f9f9; }
-        .container { max-width: 400px; margin: auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        h1 { text-align: center; color: #333; }
-        input, button { width: 100%; padding: 10px; margin: 10px 0; font-size: 16px; }
-        button { background: #007BFF; color: #fff; border: none; cursor: pointer; }
-        button:hover { background: #0056b3; }
-        .preview { width: 100%; height: 50px; border: 1px solid #ccc; margin: 10px 0; border-radius: 5px; }
-        .result { margin-top: 15px; padding: 10px; background: #f1f1f1; border-radius: 8px; font-size: 16px; }
-        .footer { text-align:center; font-size:12px; margin-top:20px; color:#666; }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            color: #fff;
+            overflow: hidden;
+            background: linear-gradient(to top, #ffffff 0%, #000000 100%);
+        }
+
+        /* Dikey yazılar için arka plan animasyonu */
+        .scrolling-text {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            overflow: hidden;
+        }
+
+        .scrolling-text div {
+            font-size: 48px;
+            font-weight: bold;
+            opacity: 0.15;
+            animation: move 10s linear infinite;
+            white-space: nowrap;
+        }
+
+        @keyframes move {
+            0% { transform: translateY(100%); }
+            100% { transform: translateY(-100%); }
+        }
+
+        /* RGB renkler */
+        .rgb1 { color: red; }
+        .rgb2 { color: green; }
+        .rgb3 { color: blue; }
+        .rgb4 { color: #ff00ff; }
+        .rgb5 { color: #00ffff; }
+        .rgb6 { color: #ffff00; }
+
+        /* Hesaplayıcı kutusu */
+        .container {
+            position: relative;
+            max-width: 400px;
+            margin: 80px auto;
+            background: rgba(34, 34, 34, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.7);
+            z-index: 10;
+        }
+
+        h1 {
+            text-align: center;
+            color: #fff;
+        }
+
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+            border: none;
+            border-radius: 6px;
+        }
+
+        input {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+        }
+
+        button {
+            background: #007BFF;
+            color: #fff;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .preview {
+            width: 100%;
+            height: 50px;
+            border: 1px solid #ccc;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+
+        .result {
+            margin-top: 15px;
+            padding: 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .footer {
+            text-align:center;
+            font-size:12px;
+            margin-top:20px;
+            color:#bbb;
+        }
     </style>
 </head>
 <body>
-    <style>
-    body {
-        margin: 0;
-        padding: 0;
-        background: #000;
-        overflow: hidden;
-        font-family: Arial, sans-serif;
-        color: #fff;
-    }
+    <!-- Arka plan yazıları -->
+    <div class="scrolling-text">
+        <div class="rgb1">ENES BİLMİŞ ENES BİLMİŞ ENES BİLMİŞ</div>
+        <div class="rgb2">ENES BİLMİŞ ENES BİLMİŞ ENES BİLMİŞ</div>
+        <div class="rgb3">ENES BİLMİŞ ENES BİLMİŞ ENES BİLMİŞ</div>
+        <div class="rgb4">ENES BİLMİŞ ENES BİLMİŞ ENES BİLMİŞ</div>
+        <div class="rgb5">ENES BİLMİŞ ENES BİLMİŞ ENES BİLMİŞ</div>
+        <div class="rgb6">ENES BİLMİŞ ENES BİLMİŞ ENES BİLMİŞ</div>
+    </div>
 
-    /* 3D dönen yazılar alanı */
-    .background-3d {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        perspective: 1500px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: -1;
-    }
-
-    .ring {
-        position: relative;
-        width: 400px;
-        height: 400px;
-        transform-style: preserve-3d;
-        animation: rotate 15s linear infinite;
-    }
-
-    .ring span {
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform-origin: 0 200px;
-        font-size: 32px;
-        font-weight: bold;
-        color: #0ff;
-        text-shadow: 0 0 10px #0ff, 0 0 20px #0ff;
-    }
-
-    @keyframes rotate {
-        0% { transform: rotateY(0deg); }
-        100% { transform: rotateY(360deg); }
-    }
-</style>
-
-<div class="background-3d">
-    <div class="ring" id="ring"></div>
-</div>
-
-<script>
-    const ring = document.getElementById('ring');
-    for (let i = 0; i < 12; i++) {
-        const span = document.createElement('span');
-        span.textContent = "ENES BİLMİŞ";
-        span.style.transform = `rotateY(${i * 30}deg) translateZ(200px)`;
-        ring.appendChild(span);
-    }
-</script>
-
+    <!-- Hesaplayıcı kutusu -->
     <div class="container">
         <h1>Renk Hesaplayıcı</h1>
         <label>RGB Kodu (#RRGGBB):</label>
@@ -114,13 +161,12 @@ function hesapla() {
     document.getElementById('colorPreview').style.background = rgbInput;
 
     let total = r + g + b;
-    if(total === 0) total = 1; // Siyah için sıfıra bölmeyi engelle
+    if(total === 0) total = 1;
 
     const rRatio = r / total;
     const gRatio = g / total;
     const bRatio = b / total;
 
-    // Şeffaflık oranı
     const transparentRatio = (3 - ((r/255)+(g/255)+(b/255))) / 3;
     const ratioSum = rRatio + gRatio + bRatio + transparentRatio;
 
@@ -129,7 +175,6 @@ function hesapla() {
     const bWeight = (bRatio / ratioSum) * totalAmount;
     const tWeight = (transparentRatio / ratioSum) * totalAmount;
 
-    // Sıvı miktarı: %20
     const liquid = totalAmount * 0.20;
 
     document.getElementById('result').innerHTML = `
@@ -144,4 +189,3 @@ function hesapla() {
 </script>
 </body>
 </html>
-

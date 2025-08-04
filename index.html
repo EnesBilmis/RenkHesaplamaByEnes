@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Renk Hesaplayıcı</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f9f9f9; }
+        .container { max-width: 400px; margin: auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #333; }
+        input, button { width: 100%; padding: 10px; margin: 10px 0; font-size: 16px; }
+        button { background: #007BFF; color: #fff; border: none; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .preview { width: 100%; height: 50px; border: 1px solid #ccc; margin: 10px 0; border-radius: 5px; }
+        .result { margin-top: 15px; padding: 10px; background: #f1f1f1; border-radius: 8px; font-size: 16px; }
+        .footer { text-align:center; font-size:12px; margin-top:20px; color:#666; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Renk Hesaplayıcı</h1>
+        <label>RGB Kodu (#RRGGBB):</label>
+        <input type="text" id="rgb" placeholder="#FF4500">
+
+        <label>Toplam Miktar (gram):</label>
+        <input type="number" id="amount" placeholder="1000">
+
+        <div class="preview" id="colorPreview"></div>
+
+        <button onclick="hesapla()">Hesapla</button>
+
+        <div class="result" id="result"></div>
+
+        <p class="footer">Made by Enes Bilmiş</p>
+    </div>
+
+<script>
+function hesapla() {
+    const rgbInput = document.getElementById('rgb').value.trim();
+    const totalAmount = parseFloat(document.getElementById('amount').value);
+
+    if(!/^#([0-9A-Fa-f]{6})$/.test(rgbInput) || isNaN(totalAmount) || totalAmount <= 0) {
+        alert('Lütfen geçerli bir RGB kodu ve miktar girin!');
+        return;
+    }
+
+    const r = parseInt(rgbInput.substr(1,2), 16);
+    const g = parseInt(rgbInput.substr(3,2), 16);
+    const b = parseInt(rgbInput.substr(5,2), 16);
+
+    document.getElementById('colorPreview').style.background = rgbInput;
+
+    let total = r + g + b;
+    if(total === 0) total = 1; // Siyah için sıfıra bölmeyi engelle
+
+    const rRatio = r / total;
+    const gRatio = g / total;
+    const bRatio = b / total;
+
+    // Şeffaflık oranı
+    const transparentRatio = (3 - ((r/255)+(g/255)+(b/255))) / 3;
+    const ratioSum = rRatio + gRatio + bRatio + transparentRatio;
+
+    const rWeight = (rRatio / ratioSum) * totalAmount;
+    const gWeight = (gRatio / ratioSum) * totalAmount;
+    const bWeight = (bRatio / ratioSum) * totalAmount;
+    const tWeight = (transparentRatio / ratioSum) * totalAmount;
+
+    // Sıvı miktarı: %20
+    const liquid = totalAmount * 0.20;
+
+    document.getElementById('result').innerHTML = `
+        <strong>Sonuç:</strong><br>
+        Kırmızı: ${rWeight.toFixed(2)} g<br>
+        Yeşil: ${gWeight.toFixed(2)} g<br>
+        Mavi: ${bWeight.toFixed(2)} g<br>
+        Şeffaf: ${tWeight.toFixed(2)} g<br>
+        Sıvı: ${liquid.toFixed(2)} ml
+    `;
+}
+</script>
+</body>
+</html>

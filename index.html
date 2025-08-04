@@ -14,41 +14,6 @@
             background: linear-gradient(to top, #ffffff 0%, #000000 100%);
         }
 
-        /* Dikey yazılar için arka plan animasyonu */
-        .scrolling-text {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-around;
-            overflow: hidden;
-        }
-
-        .scrolling-text div {
-            font-size: 48px;
-            font-weight: bold;
-            opacity: 0.15;
-            animation: move 10s linear infinite;
-            white-space: nowrap;
-        }
-
-        @keyframes move {
-            0% { transform: translateY(100%); }
-            100% { transform: translateY(-100%); }
-        }
-
-        /* RGB renkler */
-        .rgb1 { color: red; }
-        .rgb2 { color: green; }
-        .rgb3 { color: blue; }
-        .rgb4 { color: #ff00ff; }
-        .rgb5 { color: #00ffff; }
-        .rgb6 { color: #ffff00; }
-
         /* Hesaplayıcı kutusu */
         .container {
             position: relative;
@@ -116,15 +81,6 @@
     </style>
 </head>
 <body>
-    <!-- Arka plan yazıları -->
-    <div class="scrolling-text">
-        <div class="rgb1">ENES BİLMİŞ ENES BİLMİŞ ENES BİLMİŞ</div>
-        <div class="rgb2">ENES BİLMİŞ ENES BİLMİŞ ENES BİLMİŞ</div>
-        <div class="rgb3">ENES BİLMİŞ ENES BİLMİŞ ENES BİLMİŞ</div>
-        <div class="rgb4">ENES BİLMİŞ ENES BİLMİŞ ENES BİLMİŞ</div>
-        <div class="rgb5">ENES BİLMİŞ ENES BİLMİŞ ENES BİLMİŞ</div>
-        <div class="rgb6">ENES BİLMİŞ ENES BİLMİŞ ENES BİLMİŞ</div>
-    </div>
 
     <!-- Hesaplayıcı kutusu -->
     <div class="container">
@@ -189,3 +145,4 @@ function hesapla() {
 </script>
 </body>
 </html>
+

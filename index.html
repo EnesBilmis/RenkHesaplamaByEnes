@@ -95,12 +95,12 @@
         <label>RGB Kodu (#RRGGBB):</label>
         <input type="text" id="rgb" placeholder="#FF4500">
 
-        <label>İstenen Miktar:</label>
-        <input type="number" id="amount" placeholder="1000">
+        <label>Şeffaf Boya Miktarı:</label>
+        <input type="number" id="amount" placeholder="20">
 
         <select id="unit">
-            <option value="gram">Gram</option>
             <option value="litre">Litre</option>
+            <option value="gram">Gram</option>
         </select>
 
         <div class="preview" id="colorPreview"></div>
@@ -125,7 +125,7 @@ function hesapla() {
 
     // Eğer litre seçildiyse, grama çevir
     if (unit === "litre") {
-        amount = amount * 1000;
+        amount = amount * 1000; // 1 litre = 1000 gram
     }
 
     const r = parseInt(rgbInput.substr(1,2), 16);
@@ -137,17 +137,23 @@ function hesapla() {
     let total = r + g + b;
     if(total === 0) total = 1;
 
+    // Toplam pasta miktarı = şeffaf boya miktarının %5'i
+    const totalPasta = amount * 0.05;
+
     const rRatio = r / total;
     const gRatio = g / total;
     const bRatio = b / total;
 
-    const rWeight = rRatio * amount;
-    const gWeight = gRatio * amount;
-    const bWeight = bRatio * amount;
+    const rWeight = rRatio * totalPasta;
+    const gWeight = gRatio * totalPasta;
+    const bWeight = bRatio * totalPasta;
+
+    const originalAmount = document.getElementById('amount').value;
 
     document.getElementById('result').innerHTML = `
         <strong>Sonuç:</strong><br>
-        Şeffaf Boya: ${document.getElementById('amount').value} ${unit}<br>
+        Şeffaf Boya: ${originalAmount} ${unit}<br>
+        Toplam Pasta: ${totalPasta.toFixed(2)} g (%5)<br>
         Kırmızı Pasta: ${rWeight.toFixed(2)} g<br>
         Yeşil Pasta: ${gWeight.toFixed(2)} g<br>
         Mavi Pasta: ${bWeight.toFixed(2)} g

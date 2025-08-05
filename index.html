@@ -10,11 +10,9 @@
             padding: 0;
             font-family: Arial, sans-serif;
             color: #fff;
-            overflow: hidden;
             background: linear-gradient(to top, #ffffff 0%, #000000 100%);
         }
 
-        /* Hesaplayıcı kutusu */
         .container {
             position: relative;
             max-width: 400px;
@@ -31,7 +29,7 @@
             color: #fff;
         }
 
-        input, button {
+        input, select, button {
             width: 100%;
             padding: 10px;
             margin: 10px 0;
@@ -40,7 +38,7 @@
             border-radius: 6px;
         }
 
-        input {
+        input, select {
             background: rgba(255,255,255,0.1);
             color: #fff;
         }
@@ -72,42 +70,62 @@
             font-size: 16px;
         }
 
+        /* Alt kısım wave efektli yazı */
         .footer {
-            text-align:center;
-            font-size:12px;
-            margin-top:20px;
-            color:#bbb;
+            text-align: center;
+            font-size: 16px;
+            margin-top: 30px;
+            font-weight: bold;
+            background: linear-gradient(270deg, red, orange, yellow, green, blue, indigo, violet);
+            background-size: 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: wave 6s linear infinite;
+        }
+
+        @keyframes wave {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 400% 50%; }
         }
     </style>
 </head>
 <body>
-
-    <!-- Hesaplayıcı kutusu -->
     <div class="container">
         <h1>Renk Hesaplayıcı</h1>
         <label>RGB Kodu (#RRGGBB):</label>
         <input type="text" id="rgb" placeholder="#FF4500">
 
-        <label>Toplam Miktar (gram):</label>
+        <label>İstenen Miktar:</label>
         <input type="number" id="amount" placeholder="1000">
+
+        <select id="unit">
+            <option value="gram">Gram</option>
+            <option value="litre">Litre</option>
+        </select>
 
         <div class="preview" id="colorPreview"></div>
 
         <button onclick="hesapla()">Hesapla</button>
 
         <div class="result" id="result"></div>
-
-        <p class="footer">-Made By Enes (ZyroX) Bilmiş-</p>
     </div>
+
+    <p class="footer">Made by Enes Bilmiş</p>
 
 <script>
 function hesapla() {
     const rgbInput = document.getElementById('rgb').value.trim();
-    const totalAmount = parseFloat(document.getElementById('amount').value);
+    let amount = parseFloat(document.getElementById('amount').value);
+    const unit = document.getElementById('unit').value;
 
-    if(!/^#([0-9A-Fa-f]{6})$/.test(rgbInput) || isNaN(totalAmount) || totalAmount <= 0) {
+    if(!/^#([0-9A-Fa-f]{6})$/.test(rgbInput) || isNaN(amount) || amount <= 0) {
         alert('Lütfen geçerli bir RGB kodu ve miktar girin!');
         return;
+    }
+
+    // Eğer litre seçildiyse, grama çevir
+    if (unit === "litre") {
+        amount = amount * 1000;
     }
 
     const r = parseInt(rgbInput.substr(1,2), 16);
@@ -123,27 +141,18 @@ function hesapla() {
     const gRatio = g / total;
     const bRatio = b / total;
 
-    const transparentRatio = (3 - ((r/255)+(g/255)+(b/255))) / 3;
-    const ratioSum = rRatio + gRatio + bRatio + transparentRatio;
-
-    const rWeight = (rRatio / ratioSum) * totalAmount;
-    const gWeight = (gRatio / ratioSum) * totalAmount;
-    const bWeight = (bRatio / ratioSum) * totalAmount;
-    const tWeight = (transparentRatio / ratioSum) * totalAmount;
-
-    const liquid = totalAmount * 0.20;
+    const rWeight = rRatio * amount;
+    const gWeight = gRatio * amount;
+    const bWeight = bRatio * amount;
 
     document.getElementById('result').innerHTML = `
         <strong>Sonuç:</strong><br>
-        Kırmızı: ${rWeight.toFixed(2)} g<br>
-        Yeşil: ${gWeight.toFixed(2)} g<br>
-        Mavi: ${bWeight.toFixed(2)} g<br>
-        Şeffaf: ${tWeight.toFixed(2)} g<br>
-        Sıvı: ${liquid.toFixed(2)} ml
+        Şeffaf Boya: ${document.getElementById('amount').value} ${unit}<br>
+        Kırmızı Pasta: ${rWeight.toFixed(2)} g<br>
+        Yeşil Pasta: ${gWeight.toFixed(2)} g<br>
+        Mavi Pasta: ${bWeight.toFixed(2)} g
     `;
 }
 </script>
 </body>
 </html>
-
-
